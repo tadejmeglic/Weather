@@ -8,6 +8,10 @@ import json
 #SOURCE: I DO NOT CLAIM THE RIGHTS TO THE DATA PROVIDED: IT IS ENTIRELY IN THE POSSESSION
 #OF A WEBSITE, CALLED TIMEANDDATE.COM. LINK: https://www.timeanddate.com
 
+if os.path.isfile('Weather_save') == False:
+    os.makedirs('Weather_save', exist_ok=True)
+
+
 weather_frontpage_url = "https://www.timeanddate.com/weather/?low=c"
 weather_directory = os.path.join(sys.path[0], 'Weather_save')
 frontpage_filename = "weather_fp.html"
@@ -52,19 +56,41 @@ re_info = re.compile(
     # DEW POINT
     r'Dew Point:\s<\/span>\s(?P<dewpoint>.+?)<\/p>'
     r'.*?'
+    # CHANCE FOR RAIN, AMOUNT
+    r'<div class="row pdflexi">'
+    r'.*?'
+    r'</td><td class="sep" >'
+    r'.*?'
+    r'</td><td class="sep" >(?P<rainchance>.*?)<\/td><td>(?P<rainamount>.*?)<'
+    r'.*?'
     # AFTER A DAY
     # -----------
     # TEMPERATURE
-    r'<div class="row pdflexi">.*?</td><td class="sep" >(?P<ntemp>.+?)<'
+    r'</td><td class="sep" >(?P<ntemp>.+?)<'
     r'.*?'
     # WIND
     r'<td>(?P<nwind>.+?)<\/td>'
     r'.*?'
     # HUMIDITY
     r'</td><td>(?P<nhumidity>.+?)<\/td>'
+    r'.*?'
+    # CHANCE FOR RAIN, AMOUNT
+    r'<td class="sep" >(?P<nrainchance>.*?)<\/td><td>(?P<nrainamount>.*?)<'
     , flags=re.DOTALL)
     
-
+def start():
+    save_frontpage()
+    save_pages_to_file()
+    data = read_inf()
+    with open('information.csv', 'w') as file:
+        writer = csv.DictWriter(file, ['country', 'city', 'temp', 'weather',
+                                   'wind', 'visibility', 'pressure',
+                                   'humidity', 'dewpoint', 'rainchance',
+                                   'rainamount', 'ntemp', 'nwind',
+                                   'nhumidity', 'nrainchance', 'nrainamount'])
+        writer.writeheader()
+        for inf in data:
+            writer.writerow(inf)
 
 def download_url_to_string(url):
     try:
@@ -193,6 +219,16 @@ def get_inf(text):
             inf['nhumidity'] = re.search(r'\d+', inf['nhumidity']).group()
         else:
             inf['nhumidity'] = None
+        if inf['rainamount'] != '-':
+            inf['rainamount'] = re.search(r'\d+', inf['rainamount']).group()
+        else:
+            inf['rainamount'] = None
+        inf['rainchance'] = re.search(r'\d+', inf['rainchance']).group()
+        if inf['nrainamount'] != '-':
+            inf['nrainamount'] = re.search(r'\d+', inf['nrainamount']).group()
+        else:
+            inf['nrainamount'] = None
+        inf['nrainchance'] = re.search(r'\d+', inf['nrainchance']).group()
         return inf
     
     
@@ -201,17 +237,8 @@ def get_inf(text):
         print(text)
         exit()
 
-data = read_inf()
-
 from pprint import pprint
 
-with open('information.csv', 'w') as file:
-    writer = csv.DictWriter(file, ['country', 'city', 'temp', 'weather',
-                                   'wind', 'visibility', 'pressure',
-                                   'humidity', 'dewpoint', 'ntemp', 'nwind', 'nhumidity'])
-    writer.writeheader()
-    for inf in data:
-        writer.writerow(inf)
 
     
                     
