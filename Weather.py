@@ -168,31 +168,31 @@ def get_inf(text):
         inf = matching.groupdict()
         if inf['temp'] != 'N/A':
             if inf['temp'][0] == '-':
-                inf['temp'] = '-' + re.search(r'\d+', inf['temp']).group()
+                inf['temp'] = int('-' + re.search(r'\d+', inf['temp']).group())
             else:
                 inf['temp'] = int(re.search(r'\d+', inf['temp']).group())
         else:
             inf['temp'] = None
         if inf['wind'] != 'N/A':
             if inf['wind'] != 'No wind':
-                inf['wind'] = re.search(r'\d+', inf['wind']).group()
+                inf['wind'] = int(re.search(r'\d+', inf['wind']).group())
         else:
             inf['wind'] = None
         if inf['visibility'] != 'N/A':
-            inf['visibility'] = re.search(r'\d+', inf['visibility']).group()
+            inf['visibility'] = int(re.search(r'\d+', inf['visibility']).group())
         else:
             inf['visibility'] = None
         if inf['pressure'] != 'N/A':
-            inf['pressure'] = re.search(r'\d+', inf['pressure']).group()
+            inf['pressure'] = int(re.search(r'\d+', inf['pressure']).group())
         else:
             inf['pressure'] = None
         if inf['humidity'] != 'N/A':
-            inf['humidity'] = re.search(r'\d+', inf['humidity']).group()
+            inf['humidity'] = int(re.search(r'\d+', inf['humidity']).group())
         else:
             inf['humidity'] = None
         if inf['dewpoint'] != 'N/A':
             if inf['dewpoint'][0] == '-':
-                inf['dewpoint'] = '-' + re.search(r'\d+', inf['dewpoint']).group()
+                inf['dewpoint'] = int('-' + re.search(r'\d+', inf['dewpoint']).group())
             else:
                 inf['dewpoint'] = int(re.search(r'\d+', inf['dewpoint']).group())
         else:
@@ -205,30 +205,30 @@ def get_inf(text):
         inf['country'] = uppercase_every_first_letter(inf['country'])
         if inf['nwind'] != 'N/A':
             if inf['nwind'] != 'No wind':
-                inf['nwind'] = re.search(r'\d+', inf['nwind']).group()
+                inf['nwind'] = int(re.search(r'\d+', inf['nwind']).group())
         else:
             inf['nwind'] = None
         if inf['ntemp'] != 'N/A':
             if inf['ntemp'][0] == '-':
-                inf['ntemp'] = '-' + re.search(r'\d+', inf['ntemp']).group()
+                inf['ntemp'] = int('-' + re.search(r'\d+', inf['ntemp']).group())
             else:
                 inf['ntemp'] = int(re.search(r'\d+', inf['ntemp']).group())
         else:
             inf['ntemp'] = None
         if inf['nhumidity'] != 'N/A':
-            inf['nhumidity'] = re.search(r'\d+', inf['nhumidity']).group()
+            inf['nhumidity'] = int(re.search(r'\d+', inf['nhumidity']).group())
         else:
             inf['nhumidity'] = None
         if inf['rainamount'] != '-':
-            inf['rainamount'] = re.search(r'\d+', inf['rainamount']).group()
+            inf['rainamount'] = int(re.search(r'\d+', inf['rainamount']).group())
         else:
             inf['rainamount'] = None
-        inf['rainchance'] = re.search(r'\d+', inf['rainchance']).group()
+        inf['rainchance'] = int(re.search(r'\d+', inf['rainchance']).group())
         if inf['nrainamount'] != '-':
-            inf['nrainamount'] = re.search(r'\d+', inf['nrainamount']).group()
+            inf['nrainamount'] = int(re.search(r'\d+', inf['nrainamount']).group())
         else:
             inf['nrainamount'] = None
-        inf['nrainchance'] = re.search(r'\d+', inf['nrainchance']).group()
+        inf['nrainchance'] = int(re.search(r'\d+', inf['nrainchance']).group())
         return inf
     
     
